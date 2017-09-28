@@ -51,7 +51,6 @@ int realloc_array (array_t *restrict array, size_t n) {
 	return 0;
 }
 
-
 __attribute__ ((nonnull (1, 3), nothrow))
 void get_array (array_t const *restrict array, size_t i,
 	void *restrict e) {
@@ -109,9 +108,7 @@ void swap_array (array_t const *restrict array,
 	size_t i, size_t j, void *restrict tmp) {
 	void *restrict src  = index_array (array, i);
 	void *restrict dest = index_array (array, j);
-	memcpy (tmp, src,  array->esz);
-	memcpy (src, dest, array->esz);
-	memcpy (dest, tmp, array->esz);
+	swap (src, dest, tmp, array->esz);
 }
 
 __attribute__ ((nonnull (1, 5), nothrow))
@@ -119,10 +116,7 @@ void swaps_array (array_t const *restrict array,
 	size_t i, size_t j, size_t n, void *restrict tmp) {
 	void *restrict src  = index_array (array, i);
 	void *restrict dest = index_array (array, j);
-	size_t eszs = array->esz * n;
-	memcpy (tmp, src,  eszs);
-	memcpy (src, dest, eszs);
-	memcpy (dest, tmp, eszs);
+	swaps (src, dest, tmp, array->esz, n);
 }
 
 /* src and dest should not overlap ? */
@@ -131,29 +125,7 @@ void swap_array2 (array_t const *restrict array,
 	size_t i, size_t j) {
 	void *restrict src  = index_array (array, i);
 	void *restrict dest = index_array (array, j);
-	char *restrict srcc  = (char *restrict) src;
-	char *restrict destc = (char *restrict) dest;
-	/*uint64_t *restrict src64  = (uint64_t *restrict) src;
-	uint64_t *restrict dest64 = (uint64_t *restrict) dest;*/
-	size_t k;
-	/*
-	#pragma GCC ivdep
-	for (k = 0; k != array->esz / sizeof (uint64_t); k++) {
-		src64[k]  ^= dest64[k];
-		dest64[k] ^= src64[k];
-		src64[k]  ^= dest64[k];
-	}
-	#pragma GCC ivdep
-	for (k = array->esz - array->esz % sizeof (uint64_t); k != array->esz; k++) {
-
-	}
-	*/
-	#pragma GCC ivdep
-	for (k = 0; k != array->esz; k++) {
-		srcc[k]  ^= destc[k];
-		destc[k] ^= srcc[k];
-		srcc[k]  ^= destc[k];
-	}
+	swap2 (src, dest, array->esz);
 }
 
 /* src and dest should not overlap ? */
@@ -162,15 +134,7 @@ void swaps_array2 (array_t const *restrict array,
 	size_t i, size_t j, size_t n) {
 	void *restrict src  = index_array (array, i);
 	void *restrict dest = index_array (array, j);
-	char *restrict srcc  = (char *restrict) src;
-	char *restrict destc = (char *restrict) dest;
-	size_t k;
-	#pragma GCC ivdep
-	for (k = 0; k != array->esz * n; k++) {
-		srcc[k]  ^= destc[k];
-		destc[k] ^= srcc[k];
-		srcc[k]  ^= destc[k];
-	}
+	swaps2 (src, dest, array->esz, n);
 }
 
 __attribute__ ((leaf, nonnull (1), nothrow))
