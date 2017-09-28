@@ -26,6 +26,9 @@ int alloc_array (array_t *restrict array,
 	size_t esz, size_t n)
 __attribute__ ((nonnull (1), nothrow, warn_unused_result)) ;
 
+int realloc_array (array_t *restrict array, size_t n)
+__attribute__ ((nonnull (1), nothrow, warn_unused_result)) ;
+
 void get_array (array_t const *restrict array, size_t i,
    void *restrict e)
 __attribute__ ((nonnull (1, 3), nothrow)) ;

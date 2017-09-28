@@ -42,6 +42,16 @@ int alloc_array (array_t *restrict array,
 	return 0;
 }
 
+__attribute__ ((nonnull (1), nothrow, warn_unused_result))
+int realloc_array (array_t *restrict array, size_t n) {
+	void *restrict new_data = realloc (array->data, array->esz * n);
+	error_check (new_data == NULL) return -1;
+	array->data = new_data;
+	array->n = n;
+	return 0;
+}
+
+
 __attribute__ ((nonnull (1, 3), nothrow))
 void get_array (array_t const *restrict array, size_t i,
 	void *restrict e) {
