@@ -60,6 +60,24 @@ void mvs_array (array_t const *restrict array,
 	size_t i, size_t j, size_t n)
 __attribute__ ((nonnull (1), nothrow)) ;
 
+void swap_array (array_t const *restrict array,
+	size_t i, size_t j, void *restrict tmp)
+__attribute__ ((nonnull (1, 4), nothrow)) ;
+
+void swaps_array (array_t const *restrict array,
+	size_t i, size_t j, size_t n, void *restrict tmp)
+__attribute__ ((nonnull (1, 5), nothrow)) ;
+
+/* src and dest should not overlap ? */
+void swap_array2 (array_t const *restrict array,
+	size_t i, size_t j)
+__attribute__ ((nonnull (1), nothrow)) ;
+
+/* src and dest should not overlap ? */
+void swaps_array2 (array_t const *restrict array,
+	size_t i, size_t j, size_t n)
+__attribute__ ((nonnull (1), nothrow)) ;
+
 #ifdef __cplusplus
 }
 #endif
