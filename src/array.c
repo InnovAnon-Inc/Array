@@ -70,6 +70,30 @@ void sets_array (array_t const *restrict array, size_t i,
 	(void) memcpy (dest, e, array->esz * n);
 }
 
+__attribute__ ((nonnull (1), nothrow))
+void cp_array (array_t const *restrict array, size_t i, size_t j) {
+	void *restrict src  = index_array (array, i);
+	void *restrict dest = index_array (array, j);
+	memcpy (dest, src, array->esz);
+}
+
+/* src and dest should not overlap */
+__attribute__ ((nonnull (1), nothrow))
+void cps_array (array_t const *restrict array,
+	size_t i, size_t j, size_t n) {
+	void *restrict src  = index_array (array, i);
+	void *restrict dest = index_array (array, j);
+	memcpy (dest, src, array->esz * n);
+}
+
+__attribute__ ((nonnull (1), nothrow))
+void mvs_array (array_t const *restrict array,
+	size_t i, size_t j, size_t n) {
+	void *src  = index_array (array, i);
+	void *dest = index_array (array, j);
+	memmove (dest, src, array->esz * n);
+}
+
 __attribute__ ((leaf, nonnull (1), nothrow))
 void free_array (array_t const *restrict array) {
 	free (array->data);

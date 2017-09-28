@@ -45,6 +45,18 @@ __attribute__ ((nonnull (1, 3), nothrow)) ;
 void free_array (array_t const *restrict array)
 __attribute__ ((leaf, nonnull (1), nothrow)) ;
 
+void cp_array (array_t const *restrict array, size_t i, size_t j)
+__attribute__ ((nonnull (1), nothrow)) ;
+
+/* src and dest should not overlap */
+void cps_array (array_t const *restrict array,
+	size_t i, size_t j, size_t n)
+__attribute__ ((nonnull (1), nothrow)) ;
+
+void mvs_array (array_t const *restrict array,
+	size_t i, size_t j, size_t n)
+__attribute__ ((nonnull (1), nothrow)) ;
+
 #ifdef __cplusplus
 }
 #endif
