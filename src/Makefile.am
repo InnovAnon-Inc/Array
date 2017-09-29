@@ -11,5 +11,5 @@ array_SOURCES = array-test.c
 array_LDADD = libarray.la -lswap
 
 AM_CPPFLAGS = -D__STDC_INT64__
-AM_CPPFLAGS += -I $(srcdir)/../glitter/src
-AM_CPPFLAGS += -I $(srcdir)/../swap/src
+#AM_CPPFLAGS += -I $(srcdir)/../glitter/src
+#AM_CPPFLAGS += -I $(srcdir)/../swap/src
