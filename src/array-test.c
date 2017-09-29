@@ -90,7 +90,7 @@ int main (void) {
    get_nums (nums, ARRSZ (nums), maxn);
    data_print (nums, (size_t) 0, ARRSZ (nums));
 
-   gets_array (&array, (size_t) 0, nums + testi, ARRSZ (nums));
+   gets_array (&array, (size_t) 0, nums, ARRSZ (nums));
    data_print (nums, (size_t) 0, ARRSZ (nums));
 
    free_array (&array);
