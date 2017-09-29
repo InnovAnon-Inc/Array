@@ -9,7 +9,7 @@ AC_CONFIG_FILES([
  src/Makefile
 ])
 AC_CONFIG_MACRO_DIR([m4])
-#AC_CONFIG_SUBDIRS([glitter swap])
+AC_CONFIG_SUBDIRS([glitter swap])
 
 AC_CHECK_HEADERS([stdlib.h sys/types.h string.h])
 AC_CHECK_HEADERS([glitter.h swap.h])
