@@ -67,6 +67,7 @@ int main (void) {
 
    array_print (&array, (size_t) 0, (size_t) 0);
    for (testi = 0; testi != ARRSZ (nums); testi++) {
+      fprintf (stderr, "nums[%d]: %d\n", (int) testi, nums[testi]);
       set_array (&array, testi, nums + testi);
       array_print (&array, (size_t) 0, testi + 1);
    }
