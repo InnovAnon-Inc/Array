@@ -65,6 +65,7 @@ int main (void) {
    get_nums (nums, ARRSZ (nums), maxn);
    data_print (nums, (size_t) 0, ARRSZ (nums));
 
+   array_print (&array, (size_t) 0, 0);
    for (testi = 0; testi != ARRSZ (nums); testi++) {
       set_array (&array, testi, nums + testi);
       array_print (&array, (size_t) 0, testi + 1);
