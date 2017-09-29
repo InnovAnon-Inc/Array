@@ -84,13 +84,13 @@ int main (void) {
    data_print (nums, (size_t) 0, ARRSZ (nums));
 
    array_print (&array, (size_t) 0, (size_t) 0);
-   sets_array (&array, testi, nums, ARRSZ (nums));
+   sets_array (&array, (size_t) 0, nums, ARRSZ (nums));
    array_print (&array, (size_t) 0, ARRSZ (nums));
 
    get_nums (nums, ARRSZ (nums), maxn);
    data_print (nums, (size_t) 0, ARRSZ (nums));
 
-   gets_array (&array, testi, nums + testi, ARRSZ (nums));
+   gets_array (&array, (size_t) 0, nums + testi, ARRSZ (nums));
    data_print (nums, (size_t) 0, ARRSZ (nums));
 
    free_array (&array);
