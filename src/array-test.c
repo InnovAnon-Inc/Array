@@ -17,7 +17,17 @@
 
 #include <array.h>
 
-
+static void data_print (void const *restrict data,
+   size_t i, size_t j) {
+   fprintf (stderr, "["); fflush (stderr);
+   /*if (array->n != 0) {*/
+   if (i != j) {
+      fprintf (stderr, "%d", ((int const *restrict) data)[i]); fflush (stderr);
+      for (i++; i != j; i++)
+         fprintf (stderr, ", %d", ((int const *restrict) data)[i]); fflush (stderr);
+   }
+   fprintf (stderr, "]\n"); fflush (stderr);
+}
 
 /* must provide callback for printing array->data */
 
