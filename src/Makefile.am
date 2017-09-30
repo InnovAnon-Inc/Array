@@ -2,14 +2,18 @@ lib_LTLIBRARIES =
 include_HEADERS =
 bin_PROGRAMS    =
 
+LIBARRAY_LIBADD = ../swap/src/.libs/libswap.la $(LIBSWAP_LIBADD)
+
 lib_LTLIBRARIES += libarray.la
-libarray_la_SOURCES = array.c
-libarray_la_LIBADD = -lswap
+libarray_la_LIBADD = $(LIBARRAY_LIBADD)
 include_HEADERS += array.h
-bin_PROGRAMS += array
-array_SOURCES = array-test.c
-array_LDADD = libarray.la -lswap
+bin_PROGRAMS += array-test
+array_test_LDADD = libarray.la $(LIBARRAY_LIBADD)
 
 AM_CPPFLAGS = -D__STDC_INT64__
-AM_CPPFLAGS += -I $(srcdir)/../glitter/src
-AM_CPPFLAGS += -I $(srcdir)/../swap/src
+
+SUBDIRS = ../glitter
+AM_CPPFLAGS += -I ../glitter/src
+
+SUBDIRS + ../swap
+AM_CPPFLAGS += -I ../swap/src

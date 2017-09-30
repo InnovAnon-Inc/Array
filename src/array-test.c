@@ -15,22 +15,11 @@
 
 /*#include <math.h>*/
 
-#include <darr.h>
-#include <darr-resize.h>
+#include <array.h>
 
-static void data_print (void const *restrict data,
-   size_t i, size_t j) {
-   fprintf (stderr, "["); fflush (stderr);
-   /*if (array->n != 0) {*/
-   if (i != j) {
-      fprintf (stderr, "%d", ((int const *restrict) data)[i]); fflush (stderr);
-      for (i++; i != j; i++)
-         fprintf (stderr, ", %d", ((int const *restrict) data)[i]); fflush (stderr);
-   }
-   fprintf (stderr, "]\n"); fflush (stderr);
-}
 
-/* must provide acllback for printing array->data */
+
+/* must provide callback for printing array->data */
 
 __attribute__ ((nonnull (1), nothrow))
 static void array_print (array_t const *restrict array,
