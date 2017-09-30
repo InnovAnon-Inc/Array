@@ -10,7 +10,7 @@ lib_LTLIBRARIES =
 include_HEADERS =
 bin_PROGRAMS    =
 
-include $(srcdir)/Makefile-LIBADD.inc
+include Makefile-LIBADD.inc
 
 lib_LTLIBRARIES += libarray.la
 libarray_la_LIBADD = $(LIBARRAY_LIBADD)
