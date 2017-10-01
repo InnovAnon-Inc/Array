@@ -22,7 +22,7 @@ size_t arraysz (size_t esz, size_t n) {
 	return sizeof (array_t);
 }
 
-__attribute__ ((alloc_align (1), alloc_size (1, 2), /*malloc,*/
+__attribute__ ((alloc_align (1), /*alloc_size (1, 2),*/ /*malloc,*/
 	nothrow, warn_unused_result))
 array_t *ez_alloc_array (size_t esz, size_t n) {
 	void *restrict combined[2];
@@ -43,7 +43,10 @@ array_t *ez_alloc_array (size_t esz, size_t n) {
 __attribute__ ((leaf, nonnull (1), nothrow))
 void ez_free_array (array_t *restrict array) {
 	free_array (array);
-	mfree (array);
+	#pragma GCC diagnostic push
+	#pragma GCC diagnostic ignored "-Wstrict-aliasing"
+	mfree ((void *restrict) array);
+	#pragma GCC diagnostic pop
 }
 
 NOTE (this would be way faster if esz were static

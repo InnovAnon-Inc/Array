@@ -22,7 +22,7 @@ size_t arraysz (size_t esz, size_t n)
 __attribute__ ((const, nothrow, warn_unused_result)) ;
 
 array_t *ez_alloc_array (size_t esz, size_t n)
-__attribute__ ((alloc_align (1), alloc_size (1, 2), /*malloc,*/
+__attribute__ ((alloc_align (1), /*alloc_size (1, 2),*/ /*malloc,*/
 	nothrow, warn_unused_result)) ;
 
 void ez_free_array (array_t *restrict array)
