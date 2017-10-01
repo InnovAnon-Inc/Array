@@ -142,3 +142,48 @@ __attribute__ ((leaf, nonnull (1), nothrow))
 void free_array (array_t const *restrict array) {
 	free (array->data);
 }
+
+__attribute__ ((leaf, nonnull (1, 2), nothrow, pure, warn_unused_result))
+size_t indexOf_array (array_t const *restrict array,
+	void const *restrict e) {
+	size_t i;
+	void *restrict tmp;
+	TODO (is this pragma ok ?)
+	#pragma GCC ivdep
+	for (i = 0; i != array->n; i++) {
+		tmp = index_array (array, i);
+		if (memcmp (tmp, e, array->esz) == 0)
+			return i;
+	}
+	__builtin_unreachable ();
+}
+
+__attribute__ ((leaf, nonnull (1, 2), nothrow, pure, warn_unused_result))
+bool contains_array (array_t const *restrict array,
+	void const *restrict e) {
+	size_t i;
+	void *restrict tmp;
+	TODO (is this pragma ok ?)
+	#pragma GCC ivdep
+	for (i = 0; i != array->n; i++) {
+		tmp = index_array (array, i);
+		if (memcmp (tmp, e, array->esz) == 0)
+			return true;
+	}
+	return false;
+}
+
+__attribute__ ((nonnull (1, 2), nothrow, pure, warn_unused_result))
+ssize_t indexOf_array_chk (array_t const *restrict array, void *restrict e) {
+	void const *restrict e) {
+	size_t i;
+	void *restrict tmp;
+	TODO (is this pragma ok ?)
+	#pragma GCC ivdep
+	for (i = 0; i != array->n; i++) {
+		tmp = index_array (array, i);
+		if (memcmp (tmp, e, array->esz) == 0)
+			return (ssize_t) i;
+	}
+	return (ssize_t) -1;
+}
