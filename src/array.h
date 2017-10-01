@@ -28,6 +28,13 @@ __attribute__ ((alloc_align (1), /*alloc_size (1, 2),*/ /*malloc,*/
 void ez_free_array (array_t *restrict array)
 __attribute__ ((leaf, nonnull (1), nothrow)) ;
 
+array_t *ez_alloc_array2 (size_t esz, size_t n)
+__attribute__ ((alloc_align (1), /*alloc_size (1, 2),*/ /*malloc,*/
+	nothrow, warn_unused_result)) ;
+
+void ez_free_array2 (array_t *restrict array)
+__attribute__ ((leaf, nonnull (1), nothrow)) ;
+
 void *index_array (array_t const *restrict array, size_t i)
 __attribute__ ((leaf, nonnull (1), nothrow, pure, returns_nonnull, warn_unused_result)) ;
 

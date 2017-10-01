@@ -19,7 +19,7 @@ size_t datasz (size_t esz, size_t n) { return esz * n; }
 
 __attribute__ ((const, nothrow, warn_unused_result))
 size_t arraysz (size_t esz, size_t n) {
-	return sizeof (array_t);
+	return sizeof (array_t) + datasz (esz, n);
 }
 
 __attribute__ ((alloc_align (1), /*alloc_size (1, 2),*/ /*malloc,*/
@@ -28,15 +28,17 @@ array_t *ez_alloc_array (size_t esz, size_t n) {
 	void *restrict combined[2];
 	size_t eszs[2];
 	array_t *restrict array;
+	void *restrict data;
 
-	eszs[0] = arraysz (esz, n);
+	eszs[0] = sizeof (array_t);
 	eszs[1] = datasz  (esz, n);
 	error_check (mmalloc (combined, eszs,
 		eszs[0] + eszs[1], ARRSZ (eszs)) != 0)
 		return NULL;
-	array       = (array_t *restrict) combined[0];
-	array->data = (void *restrict)    combined[1];
+	array = (array_t *restrict) combined[0];
+	data  = (void *restrict)    combined[1];
 
+	init_array (array, data, esz, n);
 	return array;
 }
 
@@ -47,6 +49,33 @@ void ez_free_array (array_t *restrict array) {
 	#pragma GCC diagnostic ignored "-Wstrict-aliasing"
 	mfree ((void *restrict) array);
 	#pragma GCC diagnostic pop
+}
+
+__attribute__ ((alloc_align (1), /*alloc_size (1, 2),*/ /*malloc,*/
+	nothrow, warn_unused_result))
+array_t *ez_alloc_array2 (size_t esz, size_t n) {
+	array_t *restrict array = malloc (sizeof (array_t));
+	error_check (array == NULL) return NULL;
+	error_check (alloc_array (array, esz, n) != 0) {
+		free (array);
+		return NULL;
+	}
+	return array;
+}
+
+__attribute__ ((leaf, nonnull (1), nothrow))
+void ez_free_array (array_t *restrict array) {
+	free_array (array);
+	#pragma GCC diagnostic push
+	#pragma GCC diagnostic ignored "-Wstrict-aliasing"
+	mfree ((void *restrict) array);
+	#pragma GCC diagnostic pop
+}
+
+__attribute__ ((leaf, nonnull (1), nothrow))
+void ez_free_array2 (array_t *restrict array) {
+	free_array (array);
+	free (array);
 }
 
 NOTE (this would be way faster if esz were static
