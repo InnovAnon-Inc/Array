@@ -15,8 +15,21 @@ typedef struct {
    size_t n;
 } array_t;
 
+size_t datasz (size_t esz, size_t n)
+__attribute__ ((const, leaf, nothrow, warn_unused_result)) ;
+
+size_t arraysz (size_t esz, size_t n)
+__attribute__ ((const, nothrow, warn_unused_result)) ;
+
+array_t *ez_alloc_array (size_t esz, size_t n)
+__attribute__ ((alloc_align (1), alloc_size (1, 2), /*malloc,*/
+	nothrow, warn_unused_result)) ;
+
+void ez_free_array (array_t *restrict array)
+__attribute__ ((leaf, nonnull (1), nothrow)) ;
+
 void *index_array (array_t const *restrict array, size_t i)
-__attribute__ ((leaf, nonnull (1), pure, returns_nonnull, warn_unused_result)) ;
+__attribute__ ((leaf, nonnull (1), nothrow, pure, returns_nonnull, warn_unused_result)) ;
 
 void init_array (array_t *restrict array,
 	void *restrict data, size_t esz, size_t n)

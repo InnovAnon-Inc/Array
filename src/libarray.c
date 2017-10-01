@@ -6,23 +6,49 @@
 #define __STDC_VERSION__ 200112L
 
 #include <assert.h>
-
-/*#define NDEBUG 1*/
-
-#ifndef NDEBUG
-#include <stdio.h>
-#endif
 #include <stdlib.h>
 #include <string.h>
 
-/*#include <math.h>*/
+#include <mmalloc.h>
 #include <swap.h>
 
 #include <array.h>
 
+__attribute__ ((const, leaf, nothrow, warn_unused_result))
+size_t datasz (size_t esz, size_t n) { return esz * n; }
+
+__attribute__ ((const, nothrow, warn_unused_result))
+size_t arraysz (size_t esz, size_t n) {
+	return sizeof (array_t);
+}
+
+__attribute__ ((alloc_align (1), alloc_size (1, 2), /*malloc,*/
+	nothrow, warn_unused_result))
+array_t *ez_alloc_array (size_t esz, size_t n) {
+	void *restrict combined[2];
+	size_t eszs[2];
+	array_t *restrict array;
+
+	eszs[0] = arraysz (esz, n);
+	eszs[1] = datasz  (esz, n);
+	error_check (mmalloc (combined, eszs,
+		eszs[0] + eszs[1], ARRSZ (eszs)) != 0)
+		return NULL;
+	array       = (array_t *restrict) combined[0];
+	array->data = (void *restrict)    combined[1];
+
+	return array;
+}
+
+__attribute__ ((leaf, nonnull (1), nothrow))
+void ez_free_array (array_t *restrict array) {
+	free_array (array);
+	mfree (array);
+}
+
 NOTE (this would be way faster if esz were static
 	i.e. this is the cost of this style of generics)
-__attribute__ ((leaf, nonnull (1), pure, returns_nonnull, warn_unused_result))
+__attribute__ ((leaf, nonnull (1), nothrow, pure, returns_nonnull, warn_unused_result))
 void *index_array (array_t const *restrict array, size_t i) {
 	char *restrict data;
 	char *restrict ret;

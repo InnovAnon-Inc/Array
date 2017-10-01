@@ -6,6 +6,9 @@ AM_CPPFLAGS += -I $(top_srcdir)/glitter/src
 
 SUBDIRS += ../swap
 AM_CPPFLAGS += -I $(top_srcdir)/swap/src
+
+SUBDIRS += ../MultiMalloc
+AM_CPPFLAGS += -I $(top_srcdir)/MultiMalloc/src
 endif
 
 lib_LTLIBRARIES =
