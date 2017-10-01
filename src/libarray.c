@@ -174,7 +174,7 @@ bool contains_array (array_t const *restrict array,
 }
 
 __attribute__ ((nonnull (1, 2), nothrow, pure, warn_unused_result))
-ssize_t indexOf_array_chk (array_t const *restrict array, void *restrict e) {
+ssize_t indexOf_array_chk (array_t const *restrict array,
 	void const *restrict e) {
 	size_t i;
 	void *restrict tmp;
