@@ -64,15 +64,6 @@ array_t *ez_alloc_array2 (size_t esz, size_t n) {
 }
 
 __attribute__ ((leaf, nonnull (1), nothrow))
-void ez_free_array (array_t *restrict array) {
-	free_array (array);
-	#pragma GCC diagnostic push
-	#pragma GCC diagnostic ignored "-Wstrict-aliasing"
-	mfree ((void *restrict) array);
-	#pragma GCC diagnostic pop
-}
-
-__attribute__ ((leaf, nonnull (1), nothrow))
 void ez_free_array2 (array_t *restrict array) {
 	free_array (array);
 	free (array);
