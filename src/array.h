@@ -78,6 +78,18 @@ void swaps_array2 (array_t const *restrict array,
 	size_t i, size_t j, size_t n)
 __attribute__ ((nonnull (1), nothrow)) ;
 
+size_t indexOf_array (array_t const *restrict array,
+	void const *restrict e)
+__attribute__ ((leaf, nonnull (1, 2), nothrow, pure, warn_unused_result)) ;
+
+bool contains_array (array_t const *restrict array,
+	void const *restrict e)
+__attribute__ ((leaf, nonnull (1, 2), nothrow, pure, warn_unused_result)) ;
+
+ssize_t indexOf_array_chk (array_t const *restrict array, void *restrict e) {
+	void const *restrict e)
+__attribute__ ((nonnull (1, 2), nothrow, pure, warn_unused_result)) ;
+
 #ifdef __cplusplus
 }
 #endif
