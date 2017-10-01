@@ -20,8 +20,8 @@
 
 #include <array.h>
 
-NOTE (this would be way faster if esz were static
-	(i.e. this is the cost of this style of generics))
+NOTE (would be way faster if esz were static
+	i.e. this is the cost of this style of generics)
 __attribute__ ((leaf, nonnull (1), pure, returns_nonnull, warn_unused_result))
 void *index_array (array_t const *restrict array, size_t i) {
 	char *restrict data;
