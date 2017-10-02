@@ -141,13 +141,29 @@ int main (void) {
    for (testi = 0; testi != ARRSZ (nums); testi++)
       assert (valid[testi] == nums[testi]);
 
+   for (testi = 0; testi != ARRSZ (nums); testi++)
+      valid[testi] = (int) testi;
    for (testi = 0; testi <= ARRSZ (nums) / 2; testi += 2) {
       swaps_array2 (&array, testi, ARRSZ (nums) - testi - 1, 2);
+      swap2 (valid + testi, ARRSZ (nums) - testi - 2, sizeof (int));
+      swap2 (valid + testi + 1, ARRSZ (nums) - testi - 1, sizeof (int));
    }
-   /*
-   indexOf
-   contains
-   */
+   gets_array (&array, (size_t) 0, nums,  ARRSZ (nums));
+   for (testi = 0; testi != ARRSZ (nums); testi++)
+      assert (valid[testi] == nums[testi]);
+
+   for (testi = 0; testi != ARRSZ (nums); testi++)
+      valid[testi] = (int) (ARRSZ (nums) - testi);
+   sets_array (&array, (size_t) 0, valid, ARRSZ (nums));
+   for (testi = 0; testi != ARRSZ (nums); testi++)
+      assert (indexOf_array (array, valid + testi) == testi);
+   for (testi = 0; testi != ARRSZ (nums); testi++)
+      assert (contains_array (array, valid + testi));
+
+   for (testi = 0; testi != ARRSZ (nums); testi++)
+      valid[testi] = (int) (20 + testi);
+   for (testi = 0; testi != ARRSZ (nums); testi++)
+      assert (! contains_array (array, valid + testi));
 
    free_array (&array);
 
