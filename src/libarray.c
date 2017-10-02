@@ -151,7 +151,7 @@ __attribute__ ((nonnull (1, 3), nothrow))
 void gets_array (array_t const *restrict array, size_t i,
 	void *restrict e, size_t n) {
 	void const *restrict src;
-	assert (i + n < array->n);
+	assert (i + n <= array->n);
 	src = index_array (array, i);
 	(void) memcpy (e, src, datasz (array->esz, n));
 	TODO (verify that data is correctly copied)
@@ -169,7 +169,7 @@ __attribute__ ((nonnull (1, 3), nothrow))
 void sets_array (array_t const *restrict array, size_t i,
 	void const *restrict e, size_t n) {
 	void *restrict dest;
-	assert (i + n < array->n);
+	assert (i + n <= array->n);
 	dest = index_array (array, i);
 	(void) memcpy (dest, e, datasz (array->esz, n));
 	TODO (verify that data is correctly copied)
