@@ -146,8 +146,8 @@ int main (void) {
       valid[testi] = (int) testi;
    for (testi = 0; testi <= ARRSZ (nums) / 2; testi += 2) {
       swaps_array2 (&array, testi, ARRSZ (nums) - testi - 1, (size_t) 2);
-      swap2 (valid + testi, ARRSZ (nums) - testi - 2, sizeof (int));
-      swap2 (valid + testi + 1, ARRSZ (nums) - testi - 1, sizeof (int));
+      swap2 (valid + testi, nums + ARRSZ (nums) - testi - 2, sizeof (int));
+      swap2 (valid + testi + 1, nums+ ARRSZ (nums) - testi - 1, sizeof (int));
    }
    gets_array (&array, (size_t) 0, nums,  ARRSZ (nums));
    for (testi = 0; testi != ARRSZ (nums); testi++)
