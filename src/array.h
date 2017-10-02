@@ -5,6 +5,7 @@
 extern "C" {
 #endif
 
+#include <stdbool.h>
 #include <sys/types.h>
 
 #include <glitter.h>
@@ -21,15 +22,18 @@ __attribute__ ((const, leaf, nothrow, warn_unused_result)) ;
 size_t arraysz (size_t esz, size_t n)
 __attribute__ ((const, nothrow, warn_unused_result)) ;
 
+size_t arraysz2 (array_t const *restrict array)
+__attribute__ ((nonnull (1), nothrow, pure, warn_unused_result)) ;
+
 array_t *ez_alloc_array (size_t esz, size_t n)
-__attribute__ ((alloc_align (1), /*alloc_size (1, 2),*/ /*malloc,*/
+__attribute__ ((/*alloc_align (1),*/ /*alloc_size (1, 2),*/ /*malloc,*/
 	nothrow, warn_unused_result)) ;
 
 void ez_free_array (array_t *restrict array)
 __attribute__ ((leaf, nonnull (1), nothrow)) ;
 
 array_t *ez_alloc_array2 (size_t esz, size_t n)
-__attribute__ ((alloc_align (1), /*alloc_size (1, 2),*/ /*malloc,*/
+__attribute__ ((/*alloc_align (1),*/ /*alloc_size (1, 2),*/ /*malloc,*/
 	nothrow, warn_unused_result)) ;
 
 void ez_free_array2 (array_t *restrict array)
@@ -41,6 +45,10 @@ __attribute__ ((leaf, nonnull (1), nothrow, pure, returns_nonnull, warn_unused_r
 void init_array (array_t *restrict array,
 	void *restrict data, size_t esz, size_t n)
 __attribute__ ((leaf, nonnull (1, 2), nothrow)) ;
+
+void init_array2 (array_t *restrict array,
+	array_t const *restrict src, size_t min, size_t max)
+__attribute__ ((nonnull (1, 2), nothrow)) ;
 
 int alloc_array (array_t *restrict array,
 	size_t esz, size_t n)

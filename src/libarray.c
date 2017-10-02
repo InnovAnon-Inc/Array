@@ -22,9 +22,15 @@ size_t arraysz (size_t esz, size_t n) {
 	return sizeof (array_t) + datasz (esz, n);
 }
 
-__attribute__ ((alloc_align (1), /*alloc_size (1, 2),*/ /*malloc,*/
+__attribute__ ((nonnull (1), nothrow, pure, warn_unused_result))
+size_t arraysz2 (array_t const *restrict array) {
+	return arraysz (array->esz, array->n);
+}
+
+__attribute__ ((/*alloc_align (1),*/ /*alloc_size (1, 2),*/ /*malloc,*/
 	nothrow, warn_unused_result))
 array_t *ez_alloc_array (size_t esz, size_t n) {
+	/*
 	void *restrict combined[2];
 	size_t eszs[2];
 	array_t *restrict array;
@@ -40,6 +46,22 @@ array_t *ez_alloc_array (size_t esz, size_t n) {
 
 	init_array (array, data, esz, n);
 	return array;
+	*/
+	void *restrict *restrict combined[2];
+	size_t eszs[2];
+	array_t *restrict caq;
+	void *restrict data;
+
+	eszs[0] = sizeof (array_t);
+	eszs[1] = datasz  (esz, maxn);
+   combined[0] = (void *restrict *restrict) &caq;
+   combined[1] = (void *restrict *restrict) &data;
+	error_check (mmalloc2 (combined, eszs,
+		eszs[0] + eszs[1], ARRSZ (eszs)) != 0)
+		return NULL;
+
+   init_array (caq, data, esz, maxn);
+	return caq;
 }
 
 __attribute__ ((leaf, nonnull (1), nothrow))
@@ -51,7 +73,7 @@ void ez_free_array (array_t *restrict array) {
 	#pragma GCC diagnostic pop
 }
 
-__attribute__ ((alloc_align (1), /*alloc_size (1, 2),*/ /*malloc,*/
+__attribute__ ((/*alloc_align (1),*/ /*alloc_size (1, 2),*/ /*malloc,*/
 	nothrow, warn_unused_result))
 array_t *ez_alloc_array2 (size_t esz, size_t n) {
 	array_t *restrict array = malloc (sizeof (array_t));
@@ -89,11 +111,18 @@ void init_array (array_t *restrict array,
 	array->n    = n;
 }
 
+__attribute__ ((nonnull (1, 2), nothrow))
+void init_array2 (array_t *restrict array,
+	array_t const *restrict src, size_t min, size_t max) {
+	init_array (array, index_array (src, min),
+		src->esz, /*range_size_t (min, max)*/ max - min);
+}
+
 __attribute__ ((nonnull (1), nothrow, warn_unused_result))
 int alloc_array (array_t *restrict array,
 	size_t esz, size_t n) {
 	void *restrict data;
-	data = malloc (esz * n);
+	data = malloc (datasz (esz, n));
 	error_check (data == NULL) return -1;
 	init_array (array, data, esz, n);
 	return 0;
@@ -103,7 +132,7 @@ __attribute__ ((nonnull (1), nothrow, warn_unused_result))
 int realloc_array (array_t *restrict array, size_t n) {
 	void *restrict new_data;
 	assert (n != 0);
-	new_data = realloc (array->data, array->esz * n);
+	new_data = realloc (array->data, datasz (array->esz, n));
 	error_check (new_data == NULL) return -1;
 	array->data = new_data;
 	array->n = n;
@@ -124,7 +153,7 @@ void gets_array (array_t const *restrict array, size_t i,
 	void const *restrict src;
 	assert (i + n < array->n);
 	src = index_array (array, i);
-	(void) memcpy (e, src, array->esz * n);
+	(void) memcpy (e, src, datasz (array->esz, n));
 	TODO (verify that data is correctly copied)
 }
 
@@ -142,7 +171,7 @@ void sets_array (array_t const *restrict array, size_t i,
 	void *restrict dest;
 	assert (i + n < array->n);
 	dest = index_array (array, i);
-	(void) memcpy (dest, e, array->esz * n);
+	(void) memcpy (dest, e, datasz (array->esz, n));
 	TODO (verify that data is correctly copied)
 }
 
@@ -165,7 +194,7 @@ void cps_array (array_t const *restrict array,
 	assert (i + n < j || j + n < i);
 	src  = index_array (array, i);
 	dest = index_array (array, j);
-	memcpy (dest, src, array->esz * n);
+	memcpy (dest, src, datasz (array->esz, n));
 	TODO (verify that data is correctly copied)
 }
 
@@ -178,7 +207,7 @@ void mvs_array (array_t const *restrict array,
 	assert (j + n < array->n);
 	src  = index_array (array, i);
 	dest = index_array (array, j);
-	memmove (dest, src, array->esz * n);
+	memmove (dest, src, datasz (array->esz, n));
 	TODO (verify that data is correctly copied)
 }
 
@@ -274,3 +303,69 @@ ssize_t indexOf_array_chk (array_t const *restrict array,
 	}
 	return (ssize_t) -1;
 }
+
+typedef __attribute__ ((nonnull (1, 2), warn_unused_result))
+size_t (*print_elem_t) (char buf[], size_t bufsz,
+	void const *restrict e) ;
+
+typedef __attribute__ ((nonnull (1), warn_unused_result))
+size_t (*print_sep_t) (char buf[], size_t bufsz) ;
+
+TODO (maybe change to toString_data())
+
+__attribute__ ((leaf, nonnull (1, 3, 4, 5), nothrow, warn_unused_result))
+size_t toString_array (char buf[], size_t busfz,
+	print_elem_t print_elem, print_sep_t print_sep,
+	array_t const *restrict array) {
+	size_t i, prt;
+	void *restrict e;
+	if (array->n == 0) return ?;
+
+	e   = index_array (array, 0);
+	prt = print_elem (buf + prt, bufsz - prt, e);
+
+	for (i = 1; i != array->n && prt != bufsz; i++) {
+		prt += print_sep  (buf + prt, bufsz - prt);
+		if (prt == bufsz) break;
+		e = index_array (array, i);
+		prt += print_elem (buf + prt, bufsz - prt, e);
+	}
+	return prt;
+}
+
+/* one version takes a statically allocated array */
+/* another allocates it for you, based on the number of separators */
+__attribute__ ((leaf, nonnull (1, 3, 4), nothrow, warn_unused_result))
+size_t fromString_array (array_t *restrict array,
+	char const buf[], size_t busfz,
+	parse_elem_t parse_elem) {
+	TODO ()
+	size_t i, prt;
+	void *restrict e;
+	if (array->n == 0) return;
+
+	e   = index_array (array, 0);
+	prt = print_elem (buf + prt, bufsz - prt, e);
+
+	for (i = 1; i != array->n && prt != bufsz; i++) {
+		prt += print_sep  (buf + prt, bufsz - prt);
+		if (prt == bufsz) break;
+		e = index_array (array, i);
+		prt += print_elem (buf + prt, bufsz - prt, e);
+	}
+	return prt;
+}
+
+/*
+void toStdint_array (void *restrict buf, array_t const *restrict array) {
+	*((uint64_t *) buf++) = array->n;
+	*((uint64_t *) buf++) = array->esz;
+	(void) memcpy (buf, array->data, datasz (array->esz, array->n));
+}
+
+void fromStdint_array (array_t *restrict array, void const *restrict buf) {
+	array->n   = *((uint64_t *) buf++);
+	array->esz = *((uint64_t *) buf++);
+	(void) memcpy (array->data, buf, datasz (array->esz, array->n));
+}
+*/
