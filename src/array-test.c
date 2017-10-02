@@ -95,7 +95,7 @@ int main (void) {
 
 
    for (testi = 0; testi != ARRSZ (nums); testi++)
-      valid[testi] = testi;
+      valid[testi] = (int) testi;
    for (testi = 0; testi != ARRSZ (nums); testi++)
       set_array (&array, testi, valid + testi);
    for (testi = 0; testi != ARRSZ (nums); testi++)
@@ -104,14 +104,14 @@ int main (void) {
       assert (valid[testi] == nums[testi]);
 
    for (testi = 0; testi != ARRSZ (nums); testi++)
-      valid[testi] = ARRSZ (nums) - testi;
+      valid[testi] = (int)  (ARRSZ (nums) - testi);
    sets_array (&array, 0, valid, ARRSZ (nums));
    gets_array (&array, 0, nums,  ARRSZ (nums));
    for (testi = 0; testi != ARRSZ (nums); testi++)
       assert (valid[testi] == nums[testi]);
 
    for (testi = 0; testi != ARRSZ (nums); testi++)
-      valid[testi] = testi;
+      valid[testi] = (int) testi;
    sets_array (&array, 0, valid, ARRSZ (nums));
    for (testi = 0; testi != ARRSZ (nums) / 2; testi++) {
       cp_array (&array, testi, ARRSZ (nums) / 2 + testi);
@@ -122,7 +122,7 @@ int main (void) {
       assert (valid[testi] == nums[testi]);
 
    for (testi = 0; testi != ARRSZ (nums); testi++)
-      valid[testi] = ARRSZ (nums) - testi;
+      valid[testi] = (int) (ARRSZ (nums) - testi);
    sets_array (&array, 0, valid, ARRSZ (nums));
    cps_array (&array, 0, ARRSZ (nums) / 2);
    for (testi = 0; testi != ARRSZ (nums) / 2; testi++)
@@ -132,7 +132,7 @@ int main (void) {
       assert (valid[testi] == nums[testi]);
 
    for (testi = 0; testi != ARRSZ (nums); testi++)
-      valid[testi] = testi;
+      valid[testi] = (int) testi;
    for (testi = 0; testi != ARRSZ (nums); testi++) {
       mvs_array (&array, testi, ARRSZ (nums) - testi);
       valid[testi] = valid[0];
