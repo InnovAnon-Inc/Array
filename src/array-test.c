@@ -105,29 +105,29 @@ int main (void) {
 
    for (testi = 0; testi != ARRSZ (nums); testi++)
       valid[testi] = (int)  (ARRSZ (nums) - testi);
-   sets_array (&array, 0, valid, ARRSZ (nums));
-   gets_array (&array, 0, nums,  ARRSZ (nums));
+   sets_array (&array, (size_t) 0, valid, ARRSZ (nums));
+   gets_array (&array, (size_t) 0, nums,  ARRSZ (nums));
    for (testi = 0; testi != ARRSZ (nums); testi++)
       assert (valid[testi] == nums[testi]);
 
    for (testi = 0; testi != ARRSZ (nums); testi++)
       valid[testi] = (int) testi;
-   sets_array (&array, 0, valid, ARRSZ (nums));
+   sets_array (&array, (size_t) 0, valid, ARRSZ (nums));
    for (testi = 0; testi != ARRSZ (nums) / 2; testi++) {
       cp_array (&array, testi, ARRSZ (nums) / 2 + testi);
       valid[ARRSZ (nums) / 2 + testi] = valid[testi];
    }
-   gets_array (&array, 0, nums,  ARRSZ (nums));
+   gets_array (&array, (size_t) 0, nums,  ARRSZ (nums));
    for (testi = 0; testi != ARRSZ (nums); testi++)
       assert (valid[testi] == nums[testi]);
 
    for (testi = 0; testi != ARRSZ (nums); testi++)
       valid[testi] = (int) (ARRSZ (nums) - testi);
-   sets_array (&array, 0, valid, ARRSZ (nums));
-   cps_array (&array, 0, ARRSZ (nums) / 2);
+   sets_array (&array, (size_t) 0, valid, ARRSZ (nums));
+   cps_array (&array, (size_t) 0, ARRSZ (nums) / 2);
    for (testi = 0; testi != ARRSZ (nums) / 2; testi++)
       valid[ARRSZ (nums) / 2 + testi] = valid[testi];
-   gets_array (&array, 0, nums,  ARRSZ (nums));
+   gets_array (&array, (size_t) 0, nums,  ARRSZ (nums));
    for (testi = 0; testi != ARRSZ (nums); testi++)
       assert (valid[testi] == nums[testi]);
 
@@ -137,7 +137,7 @@ int main (void) {
       mvs_array (&array, testi, ARRSZ (nums) - testi);
       valid[testi] = valid[0];
    }
-   gets_array (&array, 0, nums,  ARRSZ (nums));
+   gets_array (&array, (size_t) 0, nums,  ARRSZ (nums));
    for (testi = 0; testi != ARRSZ (nums); testi++)
       assert (valid[testi] == nums[testi]);
 
