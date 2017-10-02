@@ -172,6 +172,7 @@ void sets_array (array_t const *restrict array, size_t i,
 	void *restrict dest;
 	/*assert (i + n < array->n);*/
 	assert (i + n <= array->n);
+	if (n == 0) return;
 	dest = index_array (array, i);
 	(void) memcpy (dest, e, datasz (array->esz, n));
 	TODO (verify that data is correctly copied)
