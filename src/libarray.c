@@ -60,7 +60,7 @@ array_t *ez_alloc_array (size_t esz, size_t n) {
 		eszs[0] + eszs[1], ARRSZ (eszs)) != 0)
 		return NULL;
 
-   init_array (caq, data, esz, maxn);
+   init_array (caq, data, esz, n);
 	return caq;
 }
 
