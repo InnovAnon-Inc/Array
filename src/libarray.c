@@ -151,6 +151,7 @@ __attribute__ ((nonnull (1, 3), nothrow))
 void gets_array (array_t const *restrict array, size_t i,
 	void *restrict e, size_t n) {
 	void const *restrict src;
+	/*assert (i + n < array->n);*/
 	assert (i + n <= array->n);
 	src = index_array (array, i);
 	(void) memcpy (e, src, datasz (array->esz, n));
@@ -169,6 +170,7 @@ __attribute__ ((nonnull (1, 3), nothrow))
 void sets_array (array_t const *restrict array, size_t i,
 	void const *restrict e, size_t n) {
 	void *restrict dest;
+	/*assert (i + n < array->n);*/
 	assert (i + n <= array->n);
 	dest = index_array (array, i);
 	(void) memcpy (dest, e, datasz (array->esz, n));
@@ -302,6 +304,17 @@ ssize_t indexOf_array_chk (array_t const *restrict array,
 			return (ssize_t) i;
 	}
 	return (ssize_t) -1;
+}
+
+__attribute__ ((leaf, nonnull (1, 2), nothrow))
+void frees_array (array_t const *restrict array, free_t f) {
+	size_t i;
+	void *restrict tmp;
+	#pragma GCC ivdep
+	for (i = 0; i != array->n; i++) {
+		tmp = index_array (array, i);
+		f (tmp);
+	}
 }
 
 /*

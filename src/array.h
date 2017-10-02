@@ -118,6 +118,12 @@ ssize_t indexOf_array_chk (array_t const *restrict array,
 	void const *restrict e)
 __attribute__ ((nonnull (1, 2), nothrow, pure, warn_unused_result)) ;
 
+typedef __attribute__ ((nonnull (1)))
+void (*free_t) (void *restrict data) ;
+
+void frees_array (array_t const *restrict array, free_t cb)
+__attribute__ ((leaf, nonnull (1, 2), nothrow)) ;
+
 #ifdef __cplusplus
 }
 #endif
