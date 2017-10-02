@@ -212,6 +212,7 @@ void mvs_array (array_t const *restrict array,
 	assert (j + n < array->n);*/
 	assert (i + n <= array->n);
 	assert (j + n <= array->n);
+	if (n == 0) return;
 	src  = index_array (array, i);
 	dest = index_array (array, j);
 	memmove (dest, src, datasz (array->esz, n));
