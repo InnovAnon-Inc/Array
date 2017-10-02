@@ -97,7 +97,7 @@ __attribute__ ((leaf, nonnull (1), nothrow, pure, returns_nonnull, warn_unused_r
 void *index_array (array_t const *restrict array, size_t i) {
 	char *restrict data;
 	char *restrict ret;
-	assert (i < array->n);
+	assert (i < array->n || (i == 0 && array->n == 0));
 	data = (char *restrict) array->data;
 	ret  = data + i * array->esz;
 	return (void *restrict) ret;
