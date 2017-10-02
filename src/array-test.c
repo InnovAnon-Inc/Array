@@ -46,6 +46,36 @@ static void get_nums (int nums[], size_t snum, int maxnum) {
       nums[k] = rand () % maxnum;
 }
 
+
+
+
+
+
+
+
+
+
+
+__attribute__ ((nonnull (1), nothrow))
+static void dumpq(array_t const *restrict q) {
+   size_t i;
+   fputs ("Q: ", stderr);
+   for (i = 0; i != q->n; i++) {
+      void *restrict head = index_array (q, i);
+      fprintf (stderr, "(%1d:%3d), ", (int) i, *(int *restrict) head);
+   }
+   fputs ("\n", stderr);
+}
+
+
+
+
+
+
+
+
+
+
 __attribute__ ((nothrow, warn_unused_result))
 int main (void) {
    array_t array;
@@ -134,6 +164,7 @@ int main (void) {
 
    for (testi = 0; testi != ARRSZ (nums); testi++)
       valid[testi] = (int) testi;
+   sets_array (&array, (size_t) 0, valid, ARRSZ (nums));
    for (testi = 0; testi != ARRSZ (nums) - 1; testi++) {
       mvs_array (&array, testi, testi + 1, ARRSZ (nums) - testi - 1);
       valid[testi + 1] = valid[0];
