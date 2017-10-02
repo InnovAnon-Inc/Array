@@ -179,6 +179,7 @@ int main (void) {
    for (testi = 0; testi < ARRSZ (nums) / 2; testi += 2) {
       if (testi == ARRSZ (nums) - testi - 2) continue;
       swaps_array2 (&array, testi, ARRSZ (nums) - testi - 2, (size_t) 2);
+      dumpq (&array);
       swap2 (valid + testi, nums + ARRSZ (nums) - testi - 2, sizeof (int));
       swap2 (valid + testi + 1, nums+ ARRSZ (nums) - testi - 1, sizeof (int));
    }
