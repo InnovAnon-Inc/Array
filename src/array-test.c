@@ -176,6 +176,7 @@ int main (void) {
    for (testi = 0; testi != ARRSZ (nums); testi++)
       valid[testi] = (int) testi;
    sets_array (&array, (size_t) 0, valid, ARRSZ (nums));
+   dumpq (&array);
    for (testi = 0; testi < ARRSZ (nums) / 2; testi += 2) {
       if (testi == ARRSZ (nums) - testi - 2) continue;
       swaps_array2 (&array, testi, ARRSZ (nums) - testi - 2, (size_t) 2);
