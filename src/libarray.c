@@ -53,7 +53,7 @@ array_t *ez_alloc_array (size_t esz, size_t n) {
 	void *restrict data;
 
 	eszs[0] = sizeof (array_t);
-	eszs[1] = datasz  (esz, maxn);
+	eszs[1] = datasz  (esz, n);
    combined[0] = (void *restrict *restrict) &caq;
    combined[1] = (void *restrict *restrict) &data;
 	error_check (mmalloc2 (combined, eszs,
@@ -304,7 +304,8 @@ ssize_t indexOf_array_chk (array_t const *restrict array,
 	return (ssize_t) -1;
 }
 
-typedef __attribute__ ((nonnull (1, 2), warn_unused_result))
+/*
+typedef __attribute__ ((nonnull (1, 3), warn_unused_result))
 size_t (*print_elem_t) (char buf[], size_t bufsz,
 	void const *restrict e) ;
 
@@ -332,9 +333,11 @@ size_t toString_array (char buf[], size_t busfz,
 	}
 	return prt;
 }
+*/
 
 /* one version takes a statically allocated array */
 /* another allocates it for you, based on the number of separators */
+/*
 __attribute__ ((leaf, nonnull (1, 3, 4), nothrow, warn_unused_result))
 size_t fromString_array (array_t *restrict array,
 	char const buf[], size_t busfz,
@@ -355,7 +358,7 @@ size_t fromString_array (array_t *restrict array,
 	}
 	return prt;
 }
-
+*/
 /*
 void toStdint_array (void *restrict buf, array_t const *restrict array) {
 	*((uint64_t *) buf++) = array->n;
