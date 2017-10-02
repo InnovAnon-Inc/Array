@@ -153,6 +153,7 @@ void gets_array (array_t const *restrict array, size_t i,
 	void const *restrict src;
 	/*assert (i + n < array->n);*/
 	assert (i + n <= array->n);
+	if (n == 0) return;
 	src = index_array (array, i);
 	(void) memcpy (e, src, datasz (array->esz, n));
 	TODO (verify that data is correctly copied)
