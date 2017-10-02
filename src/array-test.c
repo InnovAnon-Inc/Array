@@ -136,7 +136,7 @@ int main (void) {
       valid[testi] = (int) testi;
    for (testi = 0; testi != ARRSZ (nums) - 1; testi++) {
       mvs_array (&array, testi, testi + 1, ARRSZ (nums) - testi - 1);
-      valid[testi] = valid[0];
+      valid[testi + 1] = valid[0];
    }
    gets_array (&array, (size_t) 0, nums,  ARRSZ (nums));
    for (testi = 0; testi != ARRSZ (nums); testi++)
