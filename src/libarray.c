@@ -191,9 +191,12 @@ void cps_array (array_t const *restrict array,
 	size_t i, size_t j, size_t n) {
 	void const *restrict src;
 	void *restrict dest;
-	assert (i + n < array->n);
+	/*assert (i + n < array->n);
 	assert (j + n < array->n);
-	assert (i + n < j || j + n < i);
+	assert (i + n < j || j + n < i);*/
+	assert (i + n <= array->n);
+	assert (j + n <= array->n);
+	assert (i + n <= j || j + n <= i);
 	src  = index_array (array, i);
 	dest = index_array (array, j);
 	memcpy (dest, src, datasz (array->esz, n));
@@ -205,8 +208,10 @@ void mvs_array (array_t const *restrict array,
 	size_t i, size_t j, size_t n) {
 	void const *src;
 	void *dest;
-	assert (i + n < array->n);
-	assert (j + n < array->n);
+	/*assert (i + n < array->n);
+	assert (j + n < array->n);*/
+	assert (i + n <= array->n);
+	assert (j + n <= array->n);
 	src  = index_array (array, i);
 	dest = index_array (array, j);
 	memmove (dest, src, datasz (array->esz, n));
@@ -227,8 +232,10 @@ void swaps_array (array_t const *restrict array,
 	size_t i, size_t j, size_t n, void *restrict tmp) {
 	void *restrict src;
 	void *restrict dest;
-	assert (i + n < array->n);
-	assert (j + n < array->n);
+	/*assert (i + n < array->n);
+	assert (j + n < array->n);*/
+	assert (i + n <= array->n);
+	assert (j + n <= array->n);
 	src  = index_array (array, i);
 	dest = index_array (array, j);
 	swaps (src, dest, tmp, array->esz, n);
