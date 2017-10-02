@@ -181,8 +181,8 @@ int main (void) {
       if (testi == ARRSZ (nums) - testi - 2) continue;
       swaps_array2 (&array, testi, ARRSZ (nums) - testi - 2, (size_t) 2);
       dumpq (&array);
-      swap2 (valid + testi, nums + ARRSZ (nums) - testi - 2, sizeof (int));
-      swap2 (valid + testi + 1, nums+ ARRSZ (nums) - testi - 1, sizeof (int));
+      swap2 (valid + testi, valid + ARRSZ (nums) - testi - 2, sizeof (int));
+      swap2 (valid + testi + 1, valid + ARRSZ (nums) - testi - 1, sizeof (int));
    }
    gets_array (&array, (size_t) 0, nums,  ARRSZ (nums));
    for (testi = 0; testi != ARRSZ (nums); testi++)
