@@ -56,17 +56,17 @@ int realloc_parray (parray_t *restrict parray, size_t n)
 __attribute__ ((nonnull (1), nothrow, warn_unused_result)) ;
 
 void *get_parray (parray_t const *restrict parray, size_t i)
-__attribute__ ((nonnull (1, 3), nothrow)) ;
+__attribute__ ((nonnull (1), nothrow)) ;
 
 void **gets_parray (parray_t const *restrict parray, size_t i)
-__attribute__ ((nonnull (1, 3), nothrow)) ;
+__attribute__ ((nonnull (1), nothrow)) ;
 
 void set_parray (parray_t const *restrict parray, size_t i,
-	void const *restrict e)
+	void *restrict e)
 __attribute__ ((nonnull (1, 3), nothrow)) ;
 
 void sets_parray (parray_t const *restrict parray, size_t i,
-	void const **restrict e, size_t n)
+	void **restrict e, size_t n)
 __attribute__ ((nonnull (1, 3), nothrow)) ;
 
 void free_parray (parray_t const *restrict parray)
