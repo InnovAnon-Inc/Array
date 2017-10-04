@@ -22,3 +22,9 @@ libarray_la_LIBADD = $(LIBARRAY_LIBADD)
 include_HEADERS += array.h
 bin_PROGRAMS += array-test
 array_test_LDADD = libarray.la $(LIBARRAY_LIBADD)
+
+lib_LTLIBRARIES += libparray.la
+libparray_la_LIBADD = $(LIBPARRAY_LIBADD)
+include_HEADERS += parray.h
+#bin_PROGRAMS += parray-test
+#parray_test_LDADD = libparray.la $(LIBPARRAY_LIBADD)

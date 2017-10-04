@@ -12,47 +12,30 @@
 #include <mmalloc.h>
 #include <swap.h>
 
-#include <array.h>
+#include <parray.h>
 
 __attribute__ ((const, leaf, nothrow, warn_unused_result))
-size_t datasz (size_t esz, size_t n) { return esz * n; }
+size_t pdatasz (size_t n) { return sizeof (void *) * n; }
 
 __attribute__ ((const, nothrow, warn_unused_result))
-size_t arraysz (size_t esz, size_t n) {
-	return sizeof (array_t) + datasz (esz, n);
+size_t parraysz (size_t n) {
+	return sizeof (parray_t) + pdatasz (n);
 }
 
 __attribute__ ((nonnull (1), nothrow, pure, warn_unused_result))
-size_t arraysz2 (array_t const *restrict array) {
-	return arraysz (array->esz, array->n);
+size_t parraysz2 (parray_t const *restrict parray) {
+	return parraysz (parray->n);
 }
 
 __attribute__ ((/*alloc_align (1),*/ /*alloc_size (1, 2),*/ /*malloc,*/
 	nothrow, warn_unused_result))
-array_t *ez_alloc_array (size_t esz, size_t n) {
-	/*
-	void *restrict combined[2];
-	size_t eszs[2];
-	array_t *restrict array;
-	void *restrict data;
-
-	eszs[0] = sizeof (array_t);
-	eszs[1] = datasz  (esz, n);
-	error_check (mmalloc (combined, eszs,
-		eszs[0] + eszs[1], ARRSZ (eszs)) != 0)
-		return NULL;
-	array = (array_t *restrict) combined[0];
-	data  = (void *restrict)    combined[1];
-
-	init_array (array, data, esz, n);
-	return array;
-	*/
+parray_t *ez_alloc_parray (size_t n) {
 	void *restrict *restrict combined[2];
 	size_t eszs[2];
-	array_t *restrict caq;
+	parray_t *restrict caq;
 	void *restrict data;
 
-	eszs[0] = sizeof (array_t);
+	eszs[0] = sizeof (parray_t);
 	eszs[1] = datasz  (esz, n);
    combined[0] = (void *restrict *restrict) &caq;
    combined[1] = (void *restrict *restrict) &data;
@@ -60,79 +43,72 @@ array_t *ez_alloc_array (size_t esz, size_t n) {
 		eszs[0] + eszs[1], ARRSZ (eszs)) != 0)
 		return NULL;
 
-   init_array (caq, data, esz, n);
+   init_parray (caq, data, esz, n);
 	return caq;
 }
 
 __attribute__ ((leaf, nonnull (1), nothrow))
-void ez_free_array (array_t *restrict array) {
-	/*free_array (array);*/
+void ez_free_parray (parray_t *restrict parray) {
+	/*free_parray (parray);*/
 	#pragma GCC diagnostic push
 	#pragma GCC diagnostic ignored "-Wstrict-aliasing"
-	mfree ((void *restrict) array);
+	mfree ((void *restrict) parray);
 	#pragma GCC diagnostic pop
 }
 
 __attribute__ ((/*alloc_align (1),*/ /*alloc_size (1, 2),*/ /*malloc,*/
 	nothrow, warn_unused_result))
-array_t *ez_alloc_array2 (size_t esz, size_t n) {
-	array_t *restrict array = malloc (sizeof (array_t));
-	error_check (array == NULL) return NULL;
-	error_check (alloc_array (array, esz, n) != 0) {
-		free (array);
+array_t *ez_alloc_parray2 (size_t n) {
+	parray_t *restrict parray = malloc (sizeof (parray_t));
+	error_check (parray == NULL) return NULL;
+	error_check (palloc_array (parray, esz, n) != 0) {
+		free (parray);
 		return NULL;
 	}
-	return array;
+	return parray;
 }
 
 __attribute__ ((leaf, nonnull (1), nothrow))
-void ez_free_array2 (array_t *restrict array) {
-	free_array (array);
-	free (array);
+void ez_free_parray2 (parray_t *restrict parray) {
+	free_parray (parray);
+	free (parray);
 }
 
-NOTE (this would be way faster if esz were static
-	i.e. this is the cost of this style of generics)
 __attribute__ ((leaf, nonnull (1), nothrow, pure, returns_nonnull, warn_unused_result))
-void *index_array (array_t const *restrict array, size_t i) {
-	char *restrict data;
-	char *restrict ret;
+void **index_parray (parray_t const *restrict array, size_t i) {
 	assert (i < array->n || (i == 0 && array->n == 0));
-	data = (char *restrict) array->data;
-	ret  = data + i * array->esz;
-	return (void *restrict) ret;
+	return array->data + i;
 }
 
 __attribute__ ((leaf, nonnull (1, 2), nothrow))
-void init_array (array_t *restrict array,
-	void *restrict data, size_t esz, size_t n) {
+void init_parray (parray_t *restrict array,
+	void **restrict data, size_t n) {
 	array->data = data;
-	array->esz  = esz;
 	array->n    = n;
 }
 
 __attribute__ ((nonnull (1, 2), nothrow))
-void init_array2 (array_t *restrict array,
-	array_t const *restrict src, size_t min, size_t max) {
-	init_array (array, index_array (src, min),
-		src->esz, /*range_size_t (min, max)*/ /*max - min*/ range (min, max));
+void init_parray2 (parray_t *restrict array,
+	parray_t const *restrict src, size_t min, size_t max) {
+	init_parray (array, index_parray (src, min),
+		/*max - min*/ range (min, max));
 }
 
 __attribute__ ((nonnull (1), nothrow, warn_unused_result))
-int alloc_array (array_t *restrict array,
-	size_t esz, size_t n) {
-	void *restrict data;
-	data = malloc (datasz (esz, n));
+int alloc_parray (parray_t *restrict array,
+	size_t n) {
+	void **restrict data;
+	data = malloc (pdatasz (n));
 	error_check (data == NULL) return -1;
-	init_array (array, data, esz, n);
+	init_parray (array, data, n);
 	return 0;
 }
 
 __attribute__ ((nonnull (1), nothrow, warn_unused_result))
-int realloc_array (array_t *restrict array, size_t n) {
-	void *restrict new_data;
+int realloc_parray (parray_t *restrict array, size_t n) {
+	void **restrict new_data;
 	assert (n != 0);
-	new_data = realloc (array->data, datasz (array->esz, n));
+	new_data = realloc (array->data, pdatasz (n));
 	error_check (new_data == NULL) return -1;
 	array->data = new_data;
 	array->n = n;
@@ -140,56 +116,47 @@ int realloc_array (array_t *restrict array, size_t n) {
 }
 
 __attribute__ ((nonnull (1, 3), nothrow))
-void get_array (array_t const *restrict array, size_t i,
+void *get_parray (parray_t const *restrict array, size_t i) {
+	return *(index_parray (array, i));
+	/*assert (i < array->n || (i == 0 && array->n == 0));
+	return array->data[i];*/
+}
+
+__attribute__ ((nonnull (1, 3), nothrow))
+void **gets_parray (parray_t const *restrict array, size_t i) {
+	return index_parray (array, i);
+}
+
+__attribute__ ((nonnull (1, 3), nothrow))
+void set_parray (parray_t const *restrict array, size_t i,
 	void *restrict e) {
-	void const *restrict src = index_array (array, i);
-	(void) memcpy (e, src, array->esz);
-	assert (memcmp (src, e, array->esz) == 0);
+	/*assert (i < array->n || (i == 0 && array->n == 0));
+	array->data[i] = e;*/
+	*(index_parray (array, i)) = e;
 }
 
 __attribute__ ((nonnull (1, 3), nothrow))
-void gets_array (array_t const *restrict array, size_t i,
-	void *restrict e, size_t n) {
-	void const *restrict src;
-	/*assert (i + n < array->n);*/
+void sets_parray (parray_t const *restrict array, size_t i,
+	void **restrict e, size_t n) {
+	void **restrict dest;
 	assert (i + n <= array->n);
 	if (n == 0) return;
-	src = index_array (array, i);
-	(void) memcpy (e, src, datasz (array->esz, n));
-	TODO (verify that data is correctly copied)
-}
-
-__attribute__ ((nonnull (1, 3), nothrow))
-void set_array (array_t const *restrict array, size_t i,
-	void const *restrict e) {
-	void *restrict dest = index_array (array, i);
-	(void) memcpy (dest, e, array->esz);
-	assert (memcmp (dest, e, array->esz) == 0);
-}
-
-__attribute__ ((nonnull (1, 3), nothrow))
-void sets_array (array_t const *restrict array, size_t i,
-	void const *restrict e, size_t n) {
-	void *restrict dest;
-	/*assert (i + n < array->n);*/
-	assert (i + n <= array->n);
-	if (n == 0) return;
-	dest = index_array (array, i);
-	(void) memcpy (dest, e, datasz (array->esz, n));
+	dest = index_parray (array, i);
+	memcpy (dest, e, pdatasz (n));
 	TODO (verify that data is correctly copied)
 }
 
 __attribute__ ((nonnull (1), nothrow))
-void cp_array (array_t const *restrict array, size_t i, size_t j) {
-	void const *restrict src  = index_array (array, i);
-	void *restrict dest = index_array (array, j);
-	memcpy (dest, src, array->esz);
-	assert (memcmp (src, dest, array->esz) == 0);
+void cp_parray (parray_t const *restrict array, size_t i, size_t j) {
+	void const **restrict src  = index_parray (array, i);
+	void **restrict dest = index_parray (array, j);
+	*dest = *src;
+	assert (memcmp (src, dest, sizeof (void *)) == 0);
 }
 
 /* src and dest should not overlap */
 __attribute__ ((nonnull (1), nothrow))
-void cps_array (array_t const *restrict array,
+void cps_parray (parray_t const *restrict array,
 	size_t i, size_t j, size_t n) {
 	void const *restrict src;
 	void *restrict dest;
@@ -199,87 +166,88 @@ void cps_array (array_t const *restrict array,
 	assert (i + n <= array->n);
 	assert (j + n <= array->n);
 	assert (i + n <= j || j + n <= i);
-	src  = index_array (array, i);
-	dest = index_array (array, j);
-	memcpy (dest, src, datasz (array->esz, n));
+	src  = index_parray (array, i);
+	dest = index_parray (array, j);
+	memcpy (dest, src, pdatasz (n));
 	TODO (verify that data is correctly copied)
 }
 
 __attribute__ ((nonnull (1), nothrow))
-void mvs_array (array_t const *restrict array,
+void mvs_parray (parray_t const *restrict array,
 	size_t i, size_t j, size_t n) {
-	void const *src;
-	void *dest;
+	void const **src;
+	void **dest;
 	/*assert (i + n < array->n);
 	assert (j + n < array->n);*/
 	assert (i + n <= array->n);
 	assert (j + n <= array->n);
 	if (n == 0) return;
-	src  = index_array (array, i);
-	dest = index_array (array, j);
-	memmove (dest, src, datasz (array->esz, n));
+	src  = index_parray (array, i);
+	dest = index_parray (array, j);
+	memmove (dest, src, pdatasz (n));
 	TODO (verify that data is correctly copied)
 }
 
 __attribute__ ((nonnull (1, 4), nothrow))
-void swap_array (array_t const *restrict array,
+void swap_parray (parray_t const *restrict array,
 	size_t i, size_t j, void *restrict tmp) {
-	void *restrict src  = index_array (array, i);
-	void *restrict dest = index_array (array, j);
-	swap (src, dest, tmp, array->esz);
+	void **restrict src  = index_parray (array, i);
+	void **restrict dest = index_parray (array, j);
+	swap (src, dest, tmp, sizeof (void *));
 	TODO (verify that data is correctly copied)
 }
 
 __attribute__ ((nonnull (1, 5), nothrow))
-void swaps_array (array_t const *restrict array,
+void swaps_parray (parray_t const *restrict array,
 	size_t i, size_t j, size_t n, void *restrict tmp) {
-	void *restrict src;
-	void *restrict dest;
+	void **restrict src;
+	void **restrict dest;
 	/*assert (i + n < array->n);
 	assert (j + n < array->n);*/
 	assert (i + n <= array->n);
 	assert (j + n <= array->n);
-	src  = index_array (array, i);
-	dest = index_array (array, j);
-	swaps (src, dest, tmp, array->esz, n);
+	src  = index_parray (array, i);
+	dest = index_parray (array, j);
+	swaps (src, dest, tmp, sizeof (void *), n);
 	TODO (verify that data is correctly copied)
 }
 
 /* src and dest should not overlap ? */
 __attribute__ ((nonnull (1), nothrow))
-void swap_array2 (array_t const *restrict array,
+void swap_parray2 (parray_t const *restrict array,
 	size_t i, size_t j) {
-	void *restrict src  = index_array (array, i);
-	void *restrict dest = index_array (array, j);
-	swap2 (src, dest, array->esz);
+	void **restrict src  = index_parray (array, i);
+	void **restrict dest = index_parray (array, j);
+	swap2 (src, dest, sizeof (void *));
 	TODO (verify that data is correctly copied)
 }
 
 /* src and dest should not overlap ? */
 __attribute__ ((nonnull (1), nothrow))
-void swaps_array2 (array_t const *restrict array,
+void swaps_parray2 (parray_t const *restrict array,
 	size_t i, size_t j, size_t n) {
-	void *restrict src  = index_array (array, i);
-	void *restrict dest = index_array (array, j);
-	swaps2 (src, dest, array->esz, n);
+	void **restrict src  = index_parray (array, i);
+	void **restrict dest = index_parray (array, j);
+	swaps2 (src, dest, sizeof (void *), n);
 	TODO (verify that data is correctly copied)
 }
 
 __attribute__ ((leaf, nonnull (1), nothrow))
-void free_array (array_t const *restrict array) {
+void free_parray (parray_t const *restrict array) {
 	free (array->data);
 }
 
 __attribute__ ((leaf, nonnull (1, 2), nothrow, pure, warn_unused_result))
-size_t indexOf_array (array_t const *restrict array,
+size_t indexOf_parray (parray_t const *restrict array,
 	void const *restrict e) {
 	size_t i;
-	void *restrict tmp;
+	void **restrict tmp;
 	TODO (is this pragma ok ?)
 	#pragma GCC ivdep
 	for (i = 0; i != array->n; i++) {
-		tmp = index_array (array, i);
-		if (memcmp (tmp, e, array->esz) == 0)
+		/*if (array->data[i] == e) return i;*/
+		tmp = index_parray (array, i);
+		if (*tmp == e)
 			return i;
 	}
 	assert (false);
@@ -287,43 +255,43 @@ size_t indexOf_array (array_t const *restrict array,
 }
 
 __attribute__ ((leaf, nonnull (1, 2), nothrow, pure, warn_unused_result))
-bool contains_array (array_t const *restrict array,
+bool contains_parray (parray_t const *restrict array,
 	void const *restrict e) {
 	size_t i;
-	void *restrict tmp;
+	void **restrict tmp;
 	TODO (is this pragma ok ?)
 	#pragma GCC ivdep
 	for (i = 0; i != array->n; i++) {
 		tmp = index_array (array, i);
-		if (memcmp (tmp, e, array->esz) == 0)
+		if (*tmp == e)
 			return true;
 	}
 	return false;
 }
 
 __attribute__ ((nonnull (1, 2), nothrow, pure, warn_unused_result))
-ssize_t indexOf_array_chk (array_t const *restrict array,
+ssize_t indexOf_parray_chk (parray_t const *restrict array,
 	void const *restrict e) {
 	size_t i;
-	void *restrict tmp;
+	void **restrict tmp;
 	TODO (is this pragma ok ?)
 	#pragma GCC ivdep
 	for (i = 0; i != array->n; i++) {
 		tmp = index_array (array, i);
-		if (memcmp (tmp, e, array->esz) == 0)
+		if (*tmp == e)
 			return (ssize_t) i;
 	}
 	return (ssize_t) -1;
 }
 
 __attribute__ ((leaf, nonnull (1, 2), nothrow))
-void frees_array (array_t const *restrict array, free_t f) {
+void frees_parray (parray_t const *restrict array, free_t f) {
 	size_t i;
-	void *restrict tmp;
+	void **restrict tmp;
 	#pragma GCC ivdep
 	for (i = 0; i != array->n; i++) {
 		tmp = index_array (array, i);
-		f (tmp);
+		f (*tmp);
 	}
 }
 
