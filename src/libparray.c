@@ -58,10 +58,10 @@ void ez_free_parray (parray_t *restrict parray) {
 
 __attribute__ ((/*alloc_align (1),*/ /*alloc_size (1, 2),*/ /*malloc,*/
 	nothrow, warn_unused_result))
-array_t *ez_alloc_parray2 (size_t n) {
+parray_t *ez_alloc_parray2 (size_t n) {
 	parray_t *restrict parray = malloc (sizeof (parray_t));
 	error_check (parray == NULL) return NULL;
-	error_check (palloc_array (parray, n) != 0) {
+	error_check (alloc_parray (parray, n) != 0) {
 		free (parray);
 		return NULL;
 	}

@@ -38,7 +38,7 @@ __attribute__ ((/*alloc_align (1),*/ /*alloc_size (1, 2),*/ /*malloc,*/
 void ez_free_parray2 (parray_t *restrict parray)
 __attribute__ ((leaf, nonnull (1), nothrow)) ;
 
-void *index_parray (parray_t const *restrict parray, size_t i)
+void **index_parray (parray_t const *restrict parray, size_t i)
 __attribute__ ((leaf, nonnull (1), nothrow, pure, returns_nonnull, warn_unused_result)) ;
 
 void init_parray (parray_t *restrict parray,
@@ -60,7 +60,7 @@ void get_parray (parray_t const *restrict parray, size_t i,
 __attribute__ ((nonnull (1, 3), nothrow)) ;
 
 void gets_parray (parray_t const *restrict parray, size_t i,
-   void *restrict e, size_t n)
+   void **restrict e, size_t n)
 __attribute__ ((nonnull (1, 3), nothrow)) ;
 
 void set_parray (parray_t const *restrict parray, size_t i,
@@ -68,7 +68,7 @@ void set_parray (parray_t const *restrict parray, size_t i,
 __attribute__ ((nonnull (1, 3), nothrow)) ;
 
 void sets_parray (parray_t const *restrict parray, size_t i,
-	void const *restrict e, size_t n)
+	void const **restrict e, size_t n)
 __attribute__ ((nonnull (1, 3), nothrow)) ;
 
 void free_parray (parray_t const *restrict parray)
