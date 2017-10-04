@@ -42,7 +42,7 @@ void **index_parray (parray_t const *restrict parray, size_t i)
 __attribute__ ((leaf, nonnull (1), nothrow, pure, returns_nonnull, warn_unused_result)) ;
 
 void init_parray (parray_t *restrict parray,
-	void *restrict data, size_t n)
+	void **restrict data, size_t n)
 __attribute__ ((leaf, nonnull (1, 2), nothrow)) ;
 
 void init_parray2 (parray_t *restrict parray,
@@ -55,12 +55,10 @@ __attribute__ ((nonnull (1), nothrow, warn_unused_result)) ;
 int realloc_parray (parray_t *restrict parray, size_t n)
 __attribute__ ((nonnull (1), nothrow, warn_unused_result)) ;
 
-void get_parray (parray_t const *restrict parray, size_t i,
-   void *restrict e)
+void *get_parray (parray_t const *restrict parray, size_t i)
 __attribute__ ((nonnull (1, 3), nothrow)) ;
 
-void gets_parray (parray_t const *restrict parray, size_t i,
-   void **restrict e, size_t n)
+void **gets_parray (parray_t const *restrict parray, size_t i)
 __attribute__ ((nonnull (1, 3), nothrow)) ;
 
 void set_parray (parray_t const *restrict parray, size_t i,
@@ -119,7 +117,7 @@ __attribute__ ((nonnull (1, 2), nothrow, pure, warn_unused_result)) ;
 typedef __attribute__ ((nonnull (1)))
 void (*free_t) (void *restrict data) ;
 
-void frees_array (parray_t const *restrict array, free_t cb)
+void frees_parray (parray_t const *restrict array, free_t cb)
 __attribute__ ((leaf, nonnull (1, 2), nothrow)) ;
 
 #ifdef __cplusplus
