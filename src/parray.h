@@ -24,14 +24,14 @@ __attribute__ ((const, nothrow, warn_unused_result)) ;
 size_t parraysz2 (parray_t const *restrict parray)
 __attribute__ ((nonnull (1), nothrow, pure, warn_unused_result)) ;
 
-array_t *ez_alloc_parray (size_t n)
+parray_t *ez_alloc_parray (size_t n)
 __attribute__ ((/*alloc_align (1),*/ /*alloc_size (1, 2),*/ /*malloc,*/
 	nothrow, warn_unused_result)) ;
 
 void ez_free_parray (parray_t *restrict parray)
 __attribute__ ((leaf, nonnull (1), nothrow)) ;
 
-array_t *ez_alloc_parray2 (size_t n)
+parray_t *ez_alloc_parray2 (size_t n)
 __attribute__ ((/*alloc_align (1),*/ /*alloc_size (1, 2),*/ /*malloc,*/
 	nothrow, warn_unused_result)) ;
 
@@ -42,15 +42,14 @@ void *index_parray (parray_t const *restrict parray, size_t i)
 __attribute__ ((leaf, nonnull (1), nothrow, pure, returns_nonnull, warn_unused_result)) ;
 
 void init_parray (parray_t *restrict parray,
-	void *restrict data, size_t esz, size_t n)
+	void *restrict data, size_t n)
 __attribute__ ((leaf, nonnull (1, 2), nothrow)) ;
 
 void init_parray2 (parray_t *restrict parray,
-	array_t const *restrict src, size_t min, size_t max)
+	parray_t const *restrict src, size_t min, size_t max)
 __attribute__ ((nonnull (1, 2), nothrow)) ;
 
-int alloc_parray (parray_t *restrict parray,
-	size_t esz, size_t n)
+int alloc_parray (parray_t *restrict parray, size_t n)
 __attribute__ ((nonnull (1), nothrow, warn_unused_result)) ;
 
 int realloc_parray (parray_t *restrict parray, size_t n)

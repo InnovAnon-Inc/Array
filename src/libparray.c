@@ -36,14 +36,14 @@ parray_t *ez_alloc_parray (size_t n) {
 	void *restrict data;
 
 	eszs[0] = sizeof (parray_t);
-	eszs[1] = datasz  (esz, n);
+	eszs[1] = pdatasz  (n);
    combined[0] = (void *restrict *restrict) &caq;
    combined[1] = (void *restrict *restrict) &data;
 	error_check (mmalloc2 (combined, eszs,
 		eszs[0] + eszs[1], ARRSZ (eszs)) != 0)
 		return NULL;
 
-   init_parray (caq, data, esz, n);
+   init_parray (caq, data, n);
 	return caq;
 }
 
@@ -61,7 +61,7 @@ __attribute__ ((/*alloc_align (1),*/ /*alloc_size (1, 2),*/ /*malloc,*/
 array_t *ez_alloc_parray2 (size_t n) {
 	parray_t *restrict parray = malloc (sizeof (parray_t));
 	error_check (parray == NULL) return NULL;
-	error_check (palloc_array (parray, esz, n) != 0) {
+	error_check (palloc_array (parray, n) != 0) {
 		free (parray);
 		return NULL;
 	}
