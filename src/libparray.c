@@ -175,7 +175,7 @@ void cps_parray (parray_t const *restrict array,
 __attribute__ ((nonnull (1), nothrow))
 void mvs_parray (parray_t const *restrict array,
 	size_t i, size_t j, size_t n) {
-	void const **src;
+	void **src;
 	void **dest;
 	/*assert (i + n < array->n);
 	assert (j + n < array->n);*/
