@@ -148,7 +148,7 @@ void sets_parray (parray_t const *restrict array, size_t i,
 
 __attribute__ ((nonnull (1), nothrow))
 void cp_parray (parray_t const *restrict array, size_t i, size_t j) {
-	void const **restrict src  = index_parray (array, i);
+	void **restrict src  = index_parray (array, i);
 	void **restrict dest = index_parray (array, j);
 	*dest = *src;
 	assert (memcmp (src, dest, sizeof (void *)) == 0);
@@ -262,7 +262,7 @@ bool contains_parray (parray_t const *restrict array,
 	TODO (is this pragma ok ?)
 	#pragma GCC ivdep
 	for (i = 0; i != array->n; i++) {
-		tmp = index_array (array, i);
+		tmp = index_parray (array, i);
 		if (*tmp == e)
 			return true;
 	}
@@ -277,7 +277,7 @@ ssize_t indexOf_parray_chk (parray_t const *restrict array,
 	TODO (is this pragma ok ?)
 	#pragma GCC ivdep
 	for (i = 0; i != array->n; i++) {
-		tmp = index_array (array, i);
+		tmp = index_parray (array, i);
 		if (*tmp == e)
 			return (ssize_t) i;
 	}
@@ -290,7 +290,7 @@ void frees_parray (parray_t const *restrict array, free_t f) {
 	void **restrict tmp;
 	#pragma GCC ivdep
 	for (i = 0; i != array->n; i++) {
-		tmp = index_array (array, i);
+		tmp = index_parray (array, i);
 		f (*tmp);
 	}
 }
