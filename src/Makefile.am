@@ -20,5 +20,6 @@ include Makefile-LIBADD.inc
 lib_LTLIBRARIES += libarray.la
 libarray_la_LIBADD = $(LIBARRAY_LIBADD)
 include_HEADERS += array.h
+include ../StD/src/Makefile-LIBADD.inc
 bin_PROGRAMS += array-test
-array_test_LDADD = libarray.la $(LIBARRAY_LIBADD)
+array_test_LDADD = libarray.la $(LIBARRAY_LIBADD) -lsimon $(LIBSIMON_LIBADD)
