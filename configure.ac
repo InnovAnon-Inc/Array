@@ -25,12 +25,14 @@ AC_CHECK_LIB([stdlib],[memcpy])
 AC_CHECK_LIB([swap],[swap,swap2,swaps,swaps2])
 AC_CHECK_LIB([mmalloc],[mmalloc,mfree])
 
-srcdir = @srcdir@
-LIBARRAY_LIBADD="`PATH=$(srcdir)src:$PATH libarray_config --libs`"
+#srcdir = @srcdir@
+#LIBARRAY_LIBADD="`PATH=$(srcdir)src:$PATH libarray_config --libs`"
+LIBARRAY_LIBADD="`PATH=src:$PATH libarray_config --libs`"
 AC_SUBST(LIBARRAY_LIBADD)
 
 #ARRAY_TEST_LIBADD="libarray.la `PATH=$(srcdir)src:$PATH array_test_config --libs`"
-ARRAY_TEST_LIBADD="`PATH=$(srcdir)src:$PATH array_test_config --libs`"
+#ARRAY_TEST_LIBADD="`PATH=$(srcdir)src:$PATH array_test_config --libs`"
+ARRAY_TEST_LIBADD="`PATH=src:$PATH array_test_config --libs`"
 AC_SUBST(ARRAY_TEST_LIBADD)
 
 INNOVANON_WARNINGS([])
