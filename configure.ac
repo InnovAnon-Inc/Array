@@ -29,7 +29,7 @@ AC_CHECK_LIB([stdlib],[memcpy])
 #AC_CHECK_LIB([mmalloc],[mmalloc,mfree])
 
 PKG_CHECK_MODULES([GLITTER],[glitter],,)
-PKG_CHECK_MODULES([SWAP],[swap],,)
+PKG_CHECK_MODULES([SWAP],[libswap],,)
 PKG_CHECK_MODULES([MMALLOC],[mmalloc],,)
 PKG_CHECK_MODULES([SIMON],[simon],,)
 
