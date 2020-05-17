@@ -8,7 +8,8 @@ includedir=@includedir@
 Name: @PACKAGE_NAME@
 Description: array library
 Version: @PACKAGE_VERSION@
-Libs: -L${libdir} -larray
+Libs: -L${libdir} -larray -lswap -lmmalloc
 Cflags: -I${includedir}
 Requires: glitter
 Requires.private: swap mmalloc simon
+
