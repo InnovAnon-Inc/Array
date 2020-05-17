@@ -8,7 +8,7 @@ AC_CONFIG_HEADERS([config.h])
 AC_CONFIG_FILES([
  Makefile
  src/Makefile
- src/array.pc.in
+ src/array.pc
 ])
 
 PKG_PROG_PKG_CONFIG
