@@ -1,0 +1,15 @@
+prefix=@prefix@
+exec_prefix=@exec_prefix@
+libdir=@libdir@
+includedir=@includedir@
+
+#array_utility=array-test
+
+Name: @PACKAGE_NAME@ test
+Description: array library test application
+Version: @PACKAGE_VERSION@
+Libs: -L${libdir} -larray -lsimon
+Cflags: -I${includedir}
+Requires:
+Requires.private: array simon
+

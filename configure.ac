@@ -9,6 +9,7 @@ AC_CONFIG_FILES([
  Makefile
  src/Makefile
  src/array.pc
+ src/array-test.pc
 ])
 
 PKG_PROG_PKG_CONFIG
