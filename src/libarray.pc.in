@@ -12,5 +12,6 @@ Version: @PACKAGE_VERSION@
 Libs: -L${libdir} -larray
 Cflags: -I${includedir}
 Requires: glitter
-Requires.private: -lswap -lmmalloc
+#Requires.private: -lswap -lmmalloc
+Requires.private: libswap libmmalloc
 

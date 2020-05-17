@@ -11,5 +11,6 @@ Version: @PACKAGE_VERSION@
 Libs: -L${libdir} -larray
 Cflags: -I${includedir}
 Requires:
-Requires.private: -larray -lswap -lmmalloc -lsimon
+#Requires.private: -larray -lswap -lmmalloc -lsimon
+Requires.private: libarray libswap libmmalloc libsimon
 
