@@ -3,7 +3,7 @@ exec_prefix=@exec_prefix@
 libdir=@libdir@
 includedir=@includedir@
 
-#array_utility=array-test
+array_utility=array-test
 
 Name: @PACKAGE_NAME@ test
 Description: array library test application
