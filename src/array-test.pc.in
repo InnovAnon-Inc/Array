@@ -8,8 +8,8 @@ array_utility=array-test
 Name: @PACKAGE_NAME@ test
 Description: array library test application
 Version: @PACKAGE_VERSION@
-Libs: -L${libdir} -larray -lsimon
+Libs: -L${libdir} -larray
 Cflags: -I${includedir}
 Requires:
-Requires.private: array simon
+Requires.private: array -lmmalloc -lsimon
 
