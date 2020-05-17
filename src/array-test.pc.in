@@ -11,5 +11,5 @@ Version: @PACKAGE_VERSION@
 Libs: -L${libdir} -larray
 Cflags: -I${includedir}
 Requires:
-Requires.private: array -lmmalloc -lsimon
+Requires.private: -larray -lmmalloc -lsimon
 
