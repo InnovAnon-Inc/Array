@@ -8,7 +8,10 @@ AC_CONFIG_HEADERS([config.h])
 AC_CONFIG_FILES([
  Makefile
  src/Makefile
+ src/array.pc.in
 ])
+
+PKG_PROG_PKG_CONFIG
 
 AC_ARG_ENABLE([use-submodules],
     AS_HELP_STRING([--enable-use-submodules], [Enable use submodules]))
@@ -27,13 +30,18 @@ AC_CHECK_LIB([mmalloc],[mmalloc,mfree])
 
 #srcdir = @srcdir@
 #LIBARRAY_LIBADD="`PATH=$(srcdir)src:$PATH libarray_config --libs`"
-LIBARRAY_LIBADD="`PATH=src:$PATH libarray_config --libs`"
-AC_SUBST(LIBARRAY_LIBADD)
+#LIBARRAY_LIBADD="`PATH=src:$PATH libarray_config --libs`"
+#AC_SUBST(LIBARRAY_LIBADD)
 
 #ARRAY_TEST_LIBADD="libarray.la `PATH=$(srcdir)src:$PATH array_test_config --libs`"
 #ARRAY_TEST_LIBADD="`PATH=$(srcdir)src:$PATH array_test_config --libs`"
-ARRAY_TEST_LIBADD="`PATH=src:$PATH array_test_config --libs`"
-AC_SUBST(ARRAY_TEST_LIBADD)
+#ARRAY_TEST_LIBADD="`PATH=src:$PATH array_test_config --libs`"
+#AC_SUBST(ARRAY_TEST_LIBADD)
+
+PKG_CHECK_MODULES([GLITTER],[glitter],,)
+PKG_CHECK_MODULES([SWAP],[swap],,)
+PKG_CHECK_MODULES([MMALLOC],[mmalloc],,)
+PKG_CHECK_MODULES([SIMON],[simon],,)
 
 INNOVANON_WARNINGS([])
 
