@@ -30,8 +30,8 @@ AC_CHECK_LIB([stdlib],[memcpy])
 
 PKG_CHECK_MODULES([GLITTER],[glitter],,)
 PKG_CHECK_MODULES([SWAP],[libswap],,)
-PKG_CHECK_MODULES([MMALLOC],[mmalloc],,)
-PKG_CHECK_MODULES([SIMON],[simon],,)
+PKG_CHECK_MODULES([MMALLOC],[libmmalloc],,)
+PKG_CHECK_MODULES([SIMON],[libsimon],,)
 
 INNOVANON_WARNINGS([])
 
